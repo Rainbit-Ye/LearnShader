@@ -74,18 +74,19 @@ Shader "Unlit/URPUnlitShadowShader"
 
             half4 frag(Varyings IN) : SV_Target
             {
-                // Get main light
-                Light mainLight = GetMainLight(IN.shadowCoord);
+                Light light = GetMainLight(IN.shadowCoord);
                 
+                float3 nDir = normalize(IN.normalWS);
+                float3 dir = normalize(light.direction);
+                
+                float lambert = max(0.0f,dot(dir,nDir));
                 // Calculate shadow attenuation
-                float shadowAttenuation = mainLight.shadowAttenuation;
+                float shadowAttenuation = lambert * light.shadowAttenuation;
                 
                 // Return shadow value as grayscale
-                return half4(shadowAttenuation.xxx, 1.0);
+                return shadowAttenuation;
             }
             ENDHLSL
         }
     }
-    
-    FallBack "Diffuse"
 }

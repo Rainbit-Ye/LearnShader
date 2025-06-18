@@ -96,7 +96,7 @@ Shader "Unlit/OldSchool_Mix"
                 //计算视图方向
                 float3 vDir = normalize(camera - pos);
                 //=======兰伯特======
-                float lambert = max(0.0f,normalize(dot(dir,nDir)));
+                float lambert = max(0.0f,dot(dir,nDir));
                 lambert = lambert*0.5+0.5;
                 //=======镜面高光======
                 float3 rDir = normalize(reflect(-dir,nDir));//计算反射光方向
@@ -120,5 +120,4 @@ Shader "Unlit/OldSchool_Mix"
             ENDHLSL
         }
     }
-    Fallback "Diffuse"
 }
