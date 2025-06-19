@@ -50,8 +50,6 @@ Shader "Unlit/URPUnlitShadowShader"
                 float3 normalWS     : TEXCOORD1;
                 float2 uv           : TEXCOORD2;
                 
-                // Shadow coords
-                float4 shadowCoord  : TEXCOORD3;
             };
 
             Varyings vert(Attributes IN)
@@ -66,15 +64,12 @@ Shader "Unlit/URPUnlitShadowShader"
                 OUT.normalWS = normalInput.normalWS;
                 OUT.uv = IN.uv;
                 
-                // Calculate shadow coordinates
-                OUT.shadowCoord = TransformWorldToShadowCoord(OUT.positionWS);
-                
                 return OUT;
             }
 
             half4 frag(Varyings IN) : SV_Target
             {
-                Light light = GetMainLight(IN.shadowCoord);
+                Light light = GetMainLight(TransformWorldToShadowCoord(IN.positionWS));
                 
                 float3 nDir = normalize(IN.normalWS);
                 float3 dir = normalize(light.direction);
@@ -88,5 +83,6 @@ Shader "Unlit/URPUnlitShadowShader"
             }
             ENDHLSL
         }
+        UsePass "Universal Render Pipeline/Lit/ShadowCaster"
     }
 }

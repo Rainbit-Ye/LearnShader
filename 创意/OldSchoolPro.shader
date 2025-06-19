@@ -1,0 +1,159 @@
+Shader "Unlit/OldSchoolPro"
+{
+    Properties
+    {
+        [Header(texture)]
+        _MainTex("主贴图",2D) = ""{}
+        _NormalTex("法线贴图",2D) = "" {}
+        _Emission("自发光贴图",2D) = "white"{}
+        _SpecTex("高光贴图",2D) = ""{}
+        _Cubemap("Cubemap",Cube) = ""{}
+        
+        
+        [Header(Color)]
+        _ShadowColor("阴影颜色",Color) = (1,1,1,1)
+        _SkyColor("天空散射颜色",Color) = (1,1,1,1)
+        _GroundColor("地面散射颜色",Color) = (1,1,1,1)
+        _EnvColor("环境散射颜色",Color) = (1,1,1,1)
+        
+        
+        [Header(Slider)]
+        _FresnelPow("菲涅尔强度",Range(0,5)) = 2.5
+        _EnvSpecInt("环境整体光亮强度",Range(0,1)) = 0.5
+        _NormalStrength("法线强度",Range(0,1)) = 0.5
+        _3ColStrength("环境散射强度",Range(0,1)) = 0.5
+        _EmissionStrength("自发光强度",Range(0,50)) = 0.5
+        _MapMipStrength("MapMip强度",Range(0,7)) = 1
+        _SpecPow("高光强度",Range(1,100)) = 1
+        _ShadowStrength("阴影强度",Range(0,1)) = 1
+    }
+    SubShader
+    { 
+        Tags { "RenderType"="Opaque" }
+        LOD 100
+
+        Pass
+        {
+            HLSLPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Shadows.hlsl"
+
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
+            #pragma multi_compile _ _SHADOWS_SOFT
+            
+            struct Attributes 
+            {
+                float4 vertex : POSITION;
+                float4 normal : NORMAL;
+                float4 tangent : TANGENT;
+                float2 uv : TEXCOORD0;
+            };
+
+            struct Varyings 
+            {
+                float4 posCS : SV_POSITION;//由模型信息换算来的顶点屏幕信息
+                float3 posWS : TEXCOORD1;
+                float3 nDirWS : TEXCOORD2;
+                float4 tDirWS : TEXCOORD3;
+                float2 uv : TEXCOORD0;
+            };
+
+            
+            TEXTURE2D(_MainTex);
+            SAMPLER(sampler_MainTex);
+            TEXTURE2D(_NormalTex);
+            SAMPLER(sampler_NormalTex);
+            TEXTURE2D(_Emission);
+            SAMPLER(sampler_Emission);
+            TEXTURE2D(_SpecTex);
+            SAMPLER(sampler_SpecTex);
+            TEXTURECUBE(_Cubemap);
+            SAMPLER(sampler_Cubemap);
+            
+            float4 _SkyColor;
+            float4 _GroundColor;
+            float4 _EnvColor;
+            float4 _ShadowColor;
+            
+            float _FresnelPow;
+            float _EnvSpecInt;
+            float _NormalStrength;
+            float _3ColStrength;
+            float _EmissionStrength;
+            float _MapMipStrength;
+            float _SpecPow;
+            float _ShadowStrength;
+
+            Varyings vert (Attributes IN)
+            {
+                Varyings OUT;
+                VertexPositionInputs positionInput = GetVertexPositionInputs(IN.vertex.xyz); 
+                VertexNormalInputs normalInputs = GetVertexNormalInputs(IN.normal,IN.tangent);
+                OUT.posCS = positionInput.positionCS;
+                OUT.posWS = positionInput.positionWS;
+                OUT.nDirWS = normalInputs.normalWS;
+                OUT.tDirWS = float4(normalInputs.tangentWS.xyz, IN.tangent.w);
+                OUT.uv = IN.uv;
+                return OUT;
+            }
+
+            float4 frag (Varyings i) : SV_Target
+            {
+                //准备
+                Light light = GetMainLight();
+                Light shadow = GetMainLight(TransformWorldToShadowCoord(i.posWS));
+                float3 iDirWS = light.direction;
+
+                float3 cameraDir = GetCameraPositionWS();
+                float3 vDirWS = normalize(cameraDir - i.posWS);
+                float3 irDirWS = normalize(reflect(-iDirWS,i.nDirWS));
+                
+                
+                float3 bDirWS = normalize(cross(i.nDirWS,i.tDirWS) * i.tDirWS.w);
+                float3x3 TBN = float3x3(i.tDirWS.xyz,bDirWS,i.nDirWS.xyz);
+                float3 normalTS = UnpackNormal(SAMPLE_TEXTURE2D(_NormalTex,sampler_NormalTex,i.uv));
+                normalTS.rg *= _NormalStrength;
+                //中间量
+                float normal_g = i.nDirWS.g;
+                float skyCol = max(0.0,normal_g);
+                float groundCol = max(0.0,-i.nDirWS.g);
+                float envCol = 1 - skyCol - groundCol;
+                float3 nDirWS = normalize(mul(normalTS,TBN));
+                float3 vrDirWS = normalize(reflect(-vDirWS,nDirWS));
+                //纹理
+                
+                float4 mainTS = SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex,i.uv);
+                float3 emissionTS = SAMPLE_TEXTURE2D(_Emission,sampler_Emission,i.uv).rgb;
+                float4 specTS = SAMPLE_TEXTURE2D(_SpecTex,sampler_SpecTex,i.uv);
+                float4 cubeMap = SAMPLE_TEXTURECUBE_LOD(_Cubemap, sampler_Cubemap, vrDirWS, _MapMipStrength);
+
+                //光照
+                float aoLight = mainTS.a;
+                float phonglight = specTS.a;
+                float4 lambert = max(0.0,dot(iDirWS,i.nDirWS) * 0.5 + 0.5);
+                float4 phong =pow(max(0.0,dot(irDirWS,vDirWS)),_SpecPow * phonglight);
+                float3 finalLight =  lambert + phong * specTS.rgb;
+                
+                float3 shadowedColor = finalLight * _ShadowColor.rgb;
+                
+                // 使用lerp混合阴影区域和非阴影区域
+                float3 finalShadowColor = lerp(finalLight, shadowedColor, _ShadowStrength * (1.0 - shadow.shadowAttenuation));
+                float3 finalMainTex = aoLight * mainTS.xyz * _ShadowStrength * finalShadowColor + emissionTS *_EmissionStrength;
+                float3 col3 = _3ColStrength * (skyCol * _SkyColor + groundCol * _GroundColor + envCol * _EnvColor);
+                float fresnel = pow(1 - dot(nDirWS,vDirWS),_FresnelPow);
+                float4 finaEnv = fresnel * cubeMap * _EnvSpecInt * float4(col3,1);
+                
+                float4 fina =  float4(finalLight,1)  * (finaEnv + float4(finalMainTex,1) );
+                return fina;
+                return float4(emissionTS *_EmissionStrength,1);
+            }
+            ENDHLSL
+        }
+        UsePass "Universal Render Pipeline/Lit/ShadowCaster"
+    }
+}
