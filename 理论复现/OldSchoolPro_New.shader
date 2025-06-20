@@ -41,7 +41,8 @@ Shader "Unlit/OldSchoolPro"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Shadows.hlsl"
-
+            #include "DiffEnv.hlsl"
+            
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
             #pragma multi_compile _ _SHADOWS_SOFT
@@ -123,10 +124,7 @@ Shader "Unlit/OldSchoolPro"
                 float3 normalTS = UnpackNormal(SAMPLE_TEXTURE2D(_NormalTex,sampler_NormalTex,i.uv));
                 normalTS.rg *= _NormalStrength;
                 //中间量
-                float normal_g = i.nDirWS.g;
-                float skyCol = max(0.0,normal_g);
-                float groundCol = max(0.0,-i.nDirWS.g);
-                float envCol = 1 - skyCol - groundCol;
+
                 float3 nDirWS = normalize(mul(normalTS,TBN));
                 float3 vrDirWS = normalize(reflect(-vDirWS,nDirWS));
                 //纹理
@@ -144,9 +142,9 @@ Shader "Unlit/OldSchoolPro"
                 float phong =pow(max(0.0,dot(irDirWS,vDirWS)),specPow);
                 float3 mainCol = _BaseColor * mainTS.rgb;
                 float3 finalLight =  (mainCol * lambert + phong * _SpecColor) * light.color * shadow.shadowAttenuation;
-                
+                float3 col3 = EnvDiff(i.nDirWS,_SkyColor,_EnvColor,_GroundColor);
                 // 环境漫反射
-                float3 col3 = _3ColStrength * (skyCol * _SkyColor + groundCol * _GroundColor + envCol * _EnvColor);
+                
                 float3 envDiff = mainCol * _DiffInt * float4(col3,1);
                 //镜面
                 float fresnel = pow(1 - dot(nDirWS,vDirWS),_FresnelPow);

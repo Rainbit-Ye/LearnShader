@@ -39,3 +39,19 @@ matcap.shader/shadergraph：matcap复现（贴图见matcap文件夹）
 Cubemap.shader :cubeMap复现
 
 OldSchoolPro：简单的一套光照模型
+
+OldSchoolPro_New：改正过更加合理的光照模型+封装
+
+## 特效
+
+AB：ab特效方式
+
+AC：ac特效方式
+
+AD：ad特效方式
+
+Mix：菜单选择+AB
+
+UVflow：uv流动效果
+
+warp：uv扰动效果
