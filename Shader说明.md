@@ -20,7 +20,6 @@ slice_SSS滑条调子：SSS+兰伯特的一个应用，主要是remapTex（需�
 
 锈效果：镜面反射+兰伯特（需要锈噪声贴图）
 
-OldSchoolPro：简单的一套光照模型
 ## 理论复现
 
 AO.shader/shadergraph:环境光遮蔽+3col方法实现（需要模型猴子和AO贴图）
@@ -38,3 +37,5 @@ matcap.shader/shadergraph：matcap复现（贴图见matcap文件夹）
 菲涅尔：菲涅尔复现
 
 Cubemap.shader :cubeMap复现
+
+OldSchoolPro：简单的一套光照模型
