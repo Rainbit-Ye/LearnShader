@@ -1,0 +1,91 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: "Shader_\u70DF\u96FE"
+  m_Shader: {fileID: 4800000, guid: 09d2560a4ba3b014481092798e395fb1, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _ColorTex:
+        m_Texture: {fileID: 2800000, guid: f867afd116d3c2749aca4e389f000ac3, type: 3}
+        m_Scale: {x: 2, y: 2}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: dffef66376be4fa480fb02b19edbe903, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTexA:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTexB:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskTex:
+        m_Texture: {fileID: 2800000, guid: f867afd116d3c2749aca4e389f000ac3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MeltTex:
+        m_Texture: {fileID: 2800000, guid: f867afd116d3c2749aca4e389f000ac3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _UnderMaskTex:
+        m_Texture: {fileID: 2800000, guid: 550af99aa7ce6e148aacefc3d5e717d3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AlphaClip: 0.76
+    - _Clip: 0.618
+    - _Cutoff: 0.409
+    - _DissolveAmount: 0
+    - _EdgeIntensity: 2.05
+    - _EdgeWidth: 0.0774
+    - _MaskCutoff: 0.273
+    - _MaskInt: 0.725
+    - _MaskIntensity: 5
+    - _MeltWidth: 0.169
+    - _NoiseInfluence: 0.741
+    - _NoiseScale: 8
+    - _NoiseSpeed: 0.232
+    - _Opacity: 0.476
+    - _Opacoty: 0.5
+    - _StepInt: 0.253
+    - _WarpInt: 0.425
+    m_Colors:
+    - _BaseColor: {r: 0.2264151, g: 0.2264151, b: 0.2264151, a: 1}
+    - _Color: {r: 0.8490566, g: 0.741723, b: 0.8075799, a: 1}
+    - _EdgeColor: {r: 0.6981132, g: 0.6421324, b: 0.6421324, a: 1}
+    - _MainColorA: {r: 0.057493754, g: 0.6415094, b: 0.55756986, a: 1}
+    - _MainColorB: {r: 0, g: 0.080596924, b: 1, a: 1}
+    - _MaskColor: {r: 1, g: 1, b: 1, a: 1}
+    - _MaskColorA: {r: 0.11320752, g: 0.11320752, b: 0.11320752, a: 1}
+    - _MaskColorB: {r: 0.38679248, g: 0.38679248, b: 0.38679248, a: 1}
+    - _MeltColor: {r: 0.3773585, g: 0.3773585, b: 0.3773585, a: 1}
+    - _MeltColorA: {r: 0.8820755, g: 0.89812803, b: 1, a: 1}
+    - _MeltColorB: {r: 0.25743148, g: 0.41782245, b: 0.6132076, a: 0.078431375}
+    - _MeltLineColor: {r: 0.38143957, g: 0.14146666, b: 0.4188679, a: 1}
+    - _NoiseScale: {r: 0.11, g: 0.2, b: 0.12, a: 4.55}
+    - _RotateParam: {r: 0, g: 0, b: 0, a: 0}
+    - _ScaleParam: {r: 0, g: 0, b: 0, a: 0}
+    - _TranslateParam: {r: 0.09, g: 0.09, b: 0, a: 0}
+    - _WarpColor: {r: 0, g: 0.49229318, b: 1.2970282, a: 1}
+  m_BuildTextureStacks: []

@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Shader_Warp
+  m_Shader: {fileID: 4800000, guid: 5f7162a98f54a674b9ba16a205fdd412, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MaskTex:
+        m_Texture: {fileID: 2800000, guid: 9197541654ba86f4ea765c7271f4b9cb, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MeltTex:
+        m_Texture: {fileID: 2800000, guid: c3e6c87715b9f844295357c473a1fc16, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _FlowSpeed: 1
+    - _MaskInt: 0.298
+    - _MeltWidth: 0.3
+    - _Opacity: 0.121
+    - _StepInt: 0.491
+    - _WarpInt: 0.5
+    m_Colors:
+    - _MaskColorA: {r: 0.8282306, g: 1.6677052, b: 1.7735848, a: 1}
+    - _MaskColorB: {r: 1.2264152, g: 0.80411184, b: 1.151891, a: 1}
+    - _MeltColorA: {r: 0.28662333, g: 0.48913333, b: 0.5377358, a: 1}
+    - _MeltColorB: {r: 0, g: 0.09533198, b: 0.8490566, a: 1}
+    - _MeltLineColor: {r: 9.082411, g: 5.269512, b: 7.004006, a: 1}
+    - _RotateParam: {r: 0, g: 0, b: 0, a: 0}
+    - _ScaleParam: {r: 0, g: 0, b: 0, a: 0}
+    - _TranslateParam: {r: 0, g: 0, b: 0, a: 0}
+  m_BuildTextureStacks: []
